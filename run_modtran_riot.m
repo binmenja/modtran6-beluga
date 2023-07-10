@@ -31,7 +31,8 @@ disp('written')
 plot(wavnum_plt, rad_plt, LineWidth=0.5);
 xlabel('Wavenumber');
 ylabel('Radiance');
-saveas(gca,'test_riot.jpg');
+saveas(gca,'latest_run_riot.jpg');
+disp('Plot saved! - latest_run_riot.jpg')
 %% read outputsi
 %addpath('/home/binmenja/projects/rrg-yihuang-ad/binmenja/models/modtran6/nsa_analysis/')
-[wavenum, rad] =read_channels('test_riot.chn',6);  %% mlw.chn is the outputfile; 6 for specifying the version of modtran.
+%[wavenum, rad] =read_channels('test_riot.chn',6);  %% mlw.chn is the outputfile; 6 for specifying the version of modtran.
