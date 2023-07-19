@@ -15,7 +15,13 @@ function [] = modtran6_tape5_make_brb(path_modtran,nlyr,z,p,t,q,co2,o3,resolutio
     
     tape5_name = [modroot, '.tp5'];
     zenith_angle = 180-angle; % 180 - 53; %
-    
+    % Scales changes
+    %t = t-5; %%%%%%%  WATCHOUT %%%%%%%
+    %z = z-0.008;
+    t(1) = t(2)-1; 
+    %q = q./100;
+    %co2 = co2-100;
+
     %[z1, p1, t1, q1, co21, o31] = read_zptq('123lvl','mlw'); % '25lvl'; '41lvl'; '123lvl'
     %z=z1(47:122);
     %p=p1(47:122);
@@ -71,7 +77,7 @@ function [] = modtran6_tape5_make_brb(path_modtran,nlyr,z,p,t,q,co2,o3,resolutio
     card1a.c_prof = 0;                   % 0 - 7
     card1a.lsunfl = 'f' ;                  % T/F
     card1a.lbmnam = 4 ;                  % F/4/2
-    card1a.lfltnm = 'f' ;                  % T/F
+    card1a.lfltnm = 'F' ;                  % T/F
     card1a.h2oaer = ' ';                 % 
     card1a.cdtdir = 'T';
     card1a.solcon = 0;
@@ -88,7 +94,7 @@ function [] = modtran6_tape5_make_brb(path_modtran,nlyr,z,p,t,q,co2,o3,resolutio
     else
       card1a2.bmname = '       ';
     end
-    card1a3.filtnm = ' ';  
+    card1a3.filtnm = '';  
     % card 2
     card2.aplus = '  ';                  % blank / A+
     card2.ihaze = -1;                     % -1, 0, 1-10
@@ -140,7 +146,7 @@ function [] = modtran6_tape5_make_brb(path_modtran,nlyr,z,p,t,q,co2,o3,resolutio
       card2c1.zm(i) = z(i);
       card2c1.p(i) = p(i);
       card2c1.t(i) = t(i);
-      card2c1.wmol(1,i) = q(i)/4;            % H2O
+      card2c1.wmol(1,i) = q(i);%/4;            % H2O ??? jing divided by 4
       card2c1.wmol(2,i) = co2(i);          % CO2
       card2c1.wmol(3,i) = o3(i);           % O3
       
@@ -297,7 +303,9 @@ end
     if (card1a.lbmnam == 4)
     fprintf(fid,'%40s\n',card1a2.bmname);
     end
-    fprintf(fid,'%40s\n',card1a3.filtnm);
+    if ~isempty(card1a3.filtnm) 
+      fprintf(fid,'%40s\n',card1a3.filtnm);
+    end
     fprintf(fid,'%40s\n','/project/rrg-yihuang-ad/binmenja/models/modtran6/DATA/');
     % card 2
     fprintf(fid,'%2s%3d%1c%4d%3s%2d%5d%5d%5d%10.5f%10.5f%10.5f%10.5f%10.5f\n',...
@@ -320,7 +328,7 @@ end
     for i = 1:card2c.ml
     fprintf(fid,'%10.3f%10.5f%10.3f%10.6f%10.3f%10.6f%14s %1c%1c\n',...
       card2c1.zm(i), card2c1.p(i), card2c1.t(i), card2c1.wmol(1,i), card2c1.wmol(2,i), card2c1.wmol(3,i), ...
-      card2c1.jchar(i,:), card2c1.jcharx(i),card2c1.jchary );
+      card2c1.jchar(i,:), card2c1.jcharx(i),card2c1.jchary ); %%%%%%
     if (card2c.ird1 == 1)
     fprintf(fid,'%10.3f%10.3f%10.3f%10.3f%10.3f%10.3f%10.3f%10.3f\n%10.3f\n',...
       card2c2.wmol(1,i), card2c2.wmol(2,i), card2c2.wmol(3,i), ...
